@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "skills" / "code-buster" / "SKILL.md"
 PLUGIN = ROOT / ".claude-plugin" / "plugin.json"
 MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
+PACKAGE = ROOT / "package.json"
 REQUIRED_COMMANDS = {
     "summary",
     "graph",
@@ -130,6 +131,20 @@ def main() -> int:
         for entry in plugins
     ):
         fail("marketplace must expose the root code-buster plugin")
+
+    package = load_json(PACKAGE)
+    if package.get("name") != "code-buster-agent":
+        fail("npm package name must be code-buster-agent")
+    if package.get("version") != plugin.get("version"):
+        fail("npm and plugin versions must match")
+    keywords = package.get("keywords")
+    if not isinstance(keywords, list) or "pi-package" not in keywords:
+        fail("npm package must declare the pi-package keyword")
+    pi_manifest = package.get("pi")
+    if not isinstance(pi_manifest, dict) or pi_manifest.get("skills") != [
+        "./skills"
+    ]:
+        fail("Pi manifest must expose ./skills")
 
     for reference in sorted((SKILL.parent / "references").glob("*.md")):
         validate_links(reference, reference.read_text())

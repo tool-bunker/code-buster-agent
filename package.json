@@ -1,0 +1,31 @@
+{
+  "name": "code-buster-agent",
+  "version": "0.1.0",
+  "description": "Agent skill for mapping, inspecting, and reviewing repositories with Code Buster",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tool-bunker/code-buster-agent.git"
+  },
+  "homepage": "https://github.com/tool-bunker/code-buster-agent#readme",
+  "bugs": {
+    "url": "https://github.com/tool-bunker/code-buster-agent/issues"
+  },
+  "keywords": [
+    "pi-package",
+    "agent-skill",
+    "code-analysis",
+    "static-analysis",
+    "code-buster"
+  ],
+  "files": [
+    "skills",
+    "LICENSE",
+    "README.md"
+  ],
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}
