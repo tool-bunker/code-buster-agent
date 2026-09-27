@@ -1,0 +1,21 @@
+name: Agent package CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: python3 tool/verify_package.py
+      - run: npx --yes prettier --check README.md AGENTS.md skills .claude-plugin

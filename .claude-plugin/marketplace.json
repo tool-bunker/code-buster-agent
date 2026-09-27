@@ -1,0 +1,17 @@
+{
+  "name": "tool-bunker",
+  "description": "Agent integrations from Tool Bunker.",
+  "metadata": {
+    "description": "Agent integrations from Tool Bunker."
+  },
+  "owner": {
+    "name": "Tool Bunker"
+  },
+  "plugins": [
+    {
+      "name": "code-buster",
+      "source": "./",
+      "description": "Map, inspect, and review repositories with Code Buster."
+    }
+  ]
+}
