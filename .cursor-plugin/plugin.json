@@ -1,0 +1,19 @@
+{
+  "name": "code-buster",
+  "version": "0.1.0",
+  "description": "Map, inspect, and review software repositories with the Code Buster static-analysis CLI.",
+  "author": {
+    "name": "Tool Bunker",
+    "email": "hi@toolbunker.dev"
+  },
+  "homepage": "https://github.com/tool-bunker/code-buster-agent#readme",
+  "repository": "https://github.com/tool-bunker/code-buster-agent",
+  "license": "MIT",
+  "keywords": [
+    "code-analysis",
+    "static-analysis",
+    "repository-analysis",
+    "code-review"
+  ],
+  "skills": "./skills"
+}

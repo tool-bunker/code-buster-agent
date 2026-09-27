@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "skills" / "code-buster" / "SKILL.md"
 PLUGIN = ROOT / ".claude-plugin" / "plugin.json"
 MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
+CURSOR_PLUGIN = ROOT / ".cursor-plugin" / "plugin.json"
 PACKAGE = ROOT / "package.json"
 REQUIRED_COMMANDS = {
     "summary",
@@ -145,6 +146,14 @@ def main() -> int:
         "./skills"
     ]:
         fail("Pi manifest must expose ./skills")
+
+    cursor_plugin = load_json(CURSOR_PLUGIN)
+    if cursor_plugin.get("name") != plugin.get("name"):
+        fail("Cursor and Claude plugin names must match")
+    if cursor_plugin.get("version") != plugin.get("version"):
+        fail("Cursor and Claude plugin versions must match")
+    if cursor_plugin.get("skills") != "./skills":
+        fail("Cursor plugin must expose ./skills")
 
     for reference in sorted((SKILL.parent / "references").glob("*.md")):
         validate_links(reference, reference.read_text())
