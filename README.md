@@ -42,6 +42,16 @@ pi install npm:code-buster-agent
 
 Invoke the skill explicitly with `/skill:code-buster`, or let Pi load it when a repository-analysis task matches its description.
 
+## Install in Cursor
+
+The repository is packaged as a Cursor plugin. After it is accepted into the Cursor Marketplace, install `code-buster` from **Cursor → Customize → Plugins**.
+
+The same canonical skill remains available through the Agent Skills CLI:
+
+```sh
+npx skills add tool-bunker/code-buster-agent@code-buster -g -y
+```
+
 ## Install as a Claude Code plugin
 
 Add this repository as a marketplace and install the plugin:
