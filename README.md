@@ -32,6 +32,16 @@ npx skills list -g
 
 Project-local installation is also supported by omitting `-g`.
 
+## Install in Pi
+
+Install the npm package and reload Pi:
+
+```sh
+pi install npm:code-buster-agent
+```
+
+Invoke the skill explicitly with `/skill:code-buster`, or let Pi load it when a repository-analysis task matches its description.
+
 ## Install as a Claude Code plugin
 
 Add this repository as a marketplace and install the plugin:
