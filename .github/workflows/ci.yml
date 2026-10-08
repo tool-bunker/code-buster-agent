@@ -16,10 +16,10 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.13'
+          python-version: "3.13"
       - uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: "24"
       - run: python3 tool/verify_package.py
-      - run: npx --yes prettier --check README.md AGENTS.md skills .claude-plugin .cursor-plugin package.json
+      - run: npx --yes prettier --check README.md AGENTS.md skills .agents .claude-plugin .codex-plugin .cursor-plugin .devin-plugin .github/plugin .grok-plugin .kimi-plugin gemini-extension.json package.json
       - run: npm pack --dry-run

@@ -1,0 +1,18 @@
+{
+  "name": "tool-bunker",
+  "description": "Agent integrations from Tool Bunker.",
+  "owner": {
+    "name": "Tool Bunker",
+    "url": "https://github.com/tool-bunker"
+  },
+  "plugins": [
+    {
+      "name": "code-buster",
+      "description": "Map, inspect, and review repositories with Code Buster.",
+      "source": "./",
+      "category": "developer-tools",
+      "tags": ["code-quality", "repository-analysis", "static-analysis"],
+      "skills": "skills/"
+    }
+  ]
+}

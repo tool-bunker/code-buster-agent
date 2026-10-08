@@ -1,0 +1,29 @@
+{
+  "name": "code-buster",
+  "version": "0.1.0",
+  "description": "Map, inspect, and review repositories with the Code Buster static-analysis CLI.",
+  "author": {
+    "name": "Tool Bunker",
+    "url": "https://github.com/tool-bunker"
+  },
+  "homepage": "https://toolbunker.dev/codebuster/",
+  "repository": "https://github.com/tool-bunker/code-buster-agent",
+  "license": "MIT",
+  "keywords": ["code-quality", "repository-analysis", "static-analysis"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Code Buster",
+    "shortDescription": "Deterministic repository analysis for coding agents",
+    "longDescription": "Use Code Buster to map repositories, inspect dependencies, review changes, and investigate quality findings.",
+    "developerName": "Tool Bunker",
+    "category": "Developer Tools",
+    "capabilities": ["Instructions"],
+    "websiteURL": "https://toolbunker.dev/codebuster/",
+    "defaultPrompt": [
+      "Review this repository with Code Buster.",
+      "Map this repository and explain its dependency structure.",
+      "Investigate Code Buster findings before proposing fixes."
+    ],
+    "brandColor": "#6FBE8C"
+  }
+}

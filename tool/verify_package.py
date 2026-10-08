@@ -12,9 +12,18 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "skills" / "code-buster" / "SKILL.md"
-PLUGIN = ROOT / ".claude-plugin" / "plugin.json"
-MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
+CLAUDE_PLUGIN = ROOT / ".claude-plugin" / "plugin.json"
+CLAUDE_MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
 CURSOR_PLUGIN = ROOT / ".cursor-plugin" / "plugin.json"
+CODEX_PLUGIN = ROOT / ".codex-plugin" / "plugin.json"
+COPILOT_PLUGIN = ROOT / ".github" / "plugin" / "plugin.json"
+COPILOT_MARKETPLACE = ROOT / ".github" / "plugin" / "marketplace.json"
+DEVIN_PLUGIN = ROOT / ".devin-plugin" / "plugin.json"
+KIMI_PLUGIN = ROOT / ".kimi-plugin" / "plugin.json"
+GEMINI_EXTENSION = ROOT / "gemini-extension.json"
+AGENT_MARKETPLACE = ROOT / ".agents" / "plugins" / "marketplace.json"
+GROK_MARKETPLACE = ROOT / ".grok-plugin" / "marketplace.json"
+SKILLS_PLUGIN = ROOT / "skills" / "plugin.json"
 PACKAGE = ROOT / "package.json"
 REQUIRED_COMMANDS = {
     "summary",
@@ -118,8 +127,8 @@ def main() -> int:
         fail("skill compatibility must declare Code Buster 0.7.1")
     validate_links(SKILL, skill_text)
 
-    plugin = load_json(PLUGIN)
-    marketplace = load_json(MARKETPLACE)
+    plugin = load_json(CLAUDE_PLUGIN)
+    marketplace = load_json(CLAUDE_MARKETPLACE)
     if plugin.get("name") != "code-buster":
         fail("plugin name must be code-buster")
     if plugin.get("version") != "0.1.0":
@@ -154,6 +163,70 @@ def main() -> int:
         fail("Cursor and Claude plugin versions must match")
     if cursor_plugin.get("skills") != "./skills":
         fail("Cursor plugin must expose ./skills")
+
+    for path in (
+        CODEX_PLUGIN,
+        COPILOT_PLUGIN,
+        DEVIN_PLUGIN,
+        GEMINI_EXTENSION,
+    ):
+        manifest = load_json(path)
+        if manifest.get("name") != plugin.get("name"):
+            fail(f"{path.relative_to(ROOT)} name must match the Claude plugin")
+        if manifest.get("version") != plugin.get("version"):
+            fail(f"{path.relative_to(ROOT)} version must match the Claude plugin")
+
+    codex_plugin = load_json(CODEX_PLUGIN)
+    if codex_plugin.get("skills") != "./skills/":
+        fail("Codex plugin must expose ./skills/")
+    copilot_plugin = load_json(COPILOT_PLUGIN)
+    if copilot_plugin.get("skills") != "skills/":
+        fail("Copilot plugin must expose skills/")
+
+    kimi_plugin = load_json(KIMI_PLUGIN)
+    if kimi_plugin.get("name") != plugin.get("name"):
+        fail("Kimi and Claude plugin names must match")
+    if kimi_plugin.get("skills") != "./skills/":
+        fail("Kimi plugin must expose ./skills/")
+
+    skills_plugin = load_json(SKILLS_PLUGIN)
+    if skills_plugin.get("name") != plugin.get("name"):
+        fail("generic skills and Claude plugin names must match")
+    if skills_plugin.get("skills") != ".":
+        fail("generic skills manifest must expose its containing directory")
+
+    copilot_marketplace = load_json(COPILOT_MARKETPLACE)
+    copilot_entries = copilot_marketplace.get("plugins")
+    if not isinstance(copilot_entries, list) or not any(
+        isinstance(entry, dict)
+        and entry.get("name") == "code-buster"
+        and entry.get("source") == "./"
+        and entry.get("skills") == "skills/"
+        for entry in copilot_entries
+    ):
+        fail("Copilot marketplace must expose the root plugin and skills")
+
+    agent_marketplace = load_json(AGENT_MARKETPLACE)
+    agent_entries = agent_marketplace.get("plugins")
+    if not isinstance(agent_entries, list) or not any(
+        isinstance(entry, dict)
+        and entry.get("name") == "code-buster"
+        and isinstance(entry.get("source"), dict)
+        and entry["source"].get("url")
+        == "https://github.com/tool-bunker/code-buster-agent.git"
+        for entry in agent_entries
+    ):
+        fail("agent marketplace must expose the Code Buster repository")
+
+    grok_marketplace = load_json(GROK_MARKETPLACE)
+    grok_entries = grok_marketplace.get("plugins")
+    if not isinstance(grok_entries, list) or not any(
+        isinstance(entry, dict)
+        and entry.get("name") == "code-buster"
+        and entry.get("source") == "./skills"
+        for entry in grok_entries
+    ):
+        fail("Grok marketplace must expose the canonical skills directory")
 
     for reference in sorted((SKILL.parent / "references").glob("*.md")):
         validate_links(reference, reference.read_text())
