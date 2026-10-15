@@ -5,7 +5,7 @@
   "author": {
     "name": "Tool Bunker"
   },
-  "homepage": "https://toolbunker.dev/code-buster",
+  "homepage": "https://toolbunker.dev/codebuster/",
   "repository": "https://github.com/tool-bunker/code-buster-agent",
   "license": "MIT",
   "keywords": ["code-quality", "repository-analysis", "static-analysis"]
