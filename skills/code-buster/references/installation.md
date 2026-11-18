@@ -12,7 +12,7 @@ Common options:
 
 ```sh
 brew install tool-bunker/tap/code-buster
-cargo install --git https://github.com/tool-bunker/code-buster.git --tag v0.9.0 --locked
+cargo install code-buster --locked
 ```
 
 The Cargo installation requires Rust 1.88 or newer. For a verified native

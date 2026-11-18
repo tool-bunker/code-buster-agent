@@ -12,6 +12,9 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cb-version: ["0.14.0", "latest"]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -20,6 +23,16 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: "24"
+      - name: Install the supported Code Buster release
+        shell: bash
+        env:
+          CODE_BUSTER_VERSION: ${{ matrix.cb-version }}
+          PREFIX: ${{ runner.temp }}/code-buster
+        run: |
+          curl -fsSL https://toolbunker.dev/codebuster/install -o "$RUNNER_TEMP/install-cb.sh"
+          sh "$RUNNER_TEMP/install-cb.sh"
       - run: python3 tool/verify_package.py
+        env:
+          CODE_BUSTER_EXECUTABLE: ${{ runner.temp }}/code-buster/bin/cb
       - run: npx --yes prettier --check README.md AGENTS.md skills .agents .claude-plugin .codex-plugin .cursor-plugin .devin-plugin .github/plugin .grok-plugin .kimi-plugin gemini-extension.json package.json
       - run: npm pack --dry-run

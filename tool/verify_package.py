@@ -30,20 +30,13 @@ REQUIRED_COMMANDS = {
     "graph",
     "dead",
     "duplication",
-    "structure",
-    "clusters",
-    "complexity",
-    "hotspots",
+    "quality",
     "inspect",
-    "related",
-    "why",
-    "path",
-    "plan",
-    "actions",
+    "rules",
+    "config",
+    "fix",
     "review",
-    "pr",
     "doctor",
-    "explain",
     "version",
 }
 
@@ -98,19 +91,21 @@ def validate_cli(executable: str) -> None:
         capture_output=True,
         text=True,
     ).stdout
-    if parse_version(version) < (0, 7, 1):
-        fail(f"Code Buster 0.7.1 or newer required; received {version.strip()}")
+    if parse_version(version) < (0, 14, 0):
+        fail(f"Code Buster 0.14.0 or newer required; received {version.strip()}")
     help_text = subprocess.run(
         [executable, "--help"],
         check=True,
         capture_output=True,
         text=True,
+        env={**os.environ, "NO_COLOR": "1"},
     ).stdout
-    command_line = next(
-        (line for line in help_text.splitlines() if line.startswith("Commands:")),
-        "",
+    commands = re.search(
+        r"(?m)^Commands\n((?:[ \t]+\S[^\n]*\n)+)", help_text
     )
-    available = set(command_line.removeprefix("Commands:").split())
+    if commands is None:
+        fail("installed Code Buster help does not list command families")
+    available = {line.split()[0] for line in commands.group(1).splitlines()}
     missing = sorted(REQUIRED_COMMANDS - available)
     if missing:
         fail(f"installed Code Buster is missing commands: {', '.join(missing)}")
@@ -123,16 +118,16 @@ def main() -> int:
         fail("skill name must be code-buster")
     if not metadata.get("description"):
         fail("skill description is required")
-    if "0.7.1" not in metadata.get("compatibility", ""):
-        fail("skill compatibility must declare Code Buster 0.7.1")
+    if "0.14.0" not in metadata.get("compatibility", ""):
+        fail("skill compatibility must declare Code Buster 0.14.0")
     validate_links(SKILL, skill_text)
 
     plugin = load_json(CLAUDE_PLUGIN)
     marketplace = load_json(CLAUDE_MARKETPLACE)
     if plugin.get("name") != "code-buster":
         fail("plugin name must be code-buster")
-    if plugin.get("version") != "0.1.0":
-        fail("plugin version must be 0.1.0")
+    if plugin.get("version") != "0.2.0":
+        fail("plugin version must be 0.2.0")
     plugins = marketplace.get("plugins")
     if not isinstance(plugins, list) or not any(
         isinstance(entry, dict)

@@ -6,7 +6,7 @@ This repository packages one canonical `code-buster` skill for multiple agent ec
 
 ## Requirements
 
-- Code Buster 0.7.1 or newer
+- Code Buster 0.14.0 or newer
 - A local repository to analyze
 
 Verify the CLI before invoking the skill:
@@ -112,10 +112,10 @@ repository-analysis work.
 
 ## What the skill provides
 
-- Repository mapping with `summary`, `structure`, `graph`, and `clusters`
-- Focused impact analysis with `inspect`, `related`, `why`, and `path`
-- Quality investigation with `dead`, `duplication`, `complexity`, and `hotspots`
-- Changed-scope review with `review`, `pr`, and `--changed`
+- Repository mapping with `summary`, `quality --structure`, and `graph`
+- Focused impact analysis with `inspect`, `inspect --related`, `inspect --why`, and `inspect --path`
+- Quality investigation with `dead`, `duplication`, `quality --complexity`, and `quality --hotspots`
+- Changed-scope review with `review --changed`, `review --pr`, and `review --changed-base <ref>`
 - Evidence-based interpretation of actionable findings, advisories, security hotspots, and processing diagnostics
 - Safe remediation and verification guidance
 
@@ -160,7 +160,7 @@ npx skills list
 
 ## Versioning
 
-The agent package and Code Buster CLI have independent versions. Package `0.1.x` currently supports Code Buster `>=0.7.1`. Compatibility changes must update the skill frontmatter, every versioned manifest, README, and validator together.
+The agent package and Code Buster CLI have independent versions. Package `0.2.x` supports Code Buster `>=0.14.0`. Compatibility changes must update the skill frontmatter, every versioned manifest, README, and validator together. CI verifies the minimum supported CLI and the latest published release.
 
 ## License
 

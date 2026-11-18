@@ -1,6 +1,6 @@
 {
   "name": "code-buster",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Map, inspect, and review repositories with the Code Buster static-analysis CLI.",
   "author": {
     "name": "Tool Bunker",

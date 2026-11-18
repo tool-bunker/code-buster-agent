@@ -2,7 +2,7 @@
 name: code-buster
 description: Map, inspect, and review software repositories with the Code Buster static-analysis CLI. Use when an agent needs repository structure, dependency paths, related files, dead code, duplication, complexity, hotspots, changed-scope review, or evidence-backed remediation priorities.
 license: MIT
-compatibility: Requires Code Buster 0.7.1 or newer and a local repository to analyze.
+compatibility: Requires Code Buster 0.14.0 or newer and a local repository to analyze.
 ---
 
 # Use Code Buster
@@ -26,21 +26,20 @@ Start with the cheapest repository-wide views:
 
 ```sh
 cb summary
-cb structure
+cb quality --structure
 cb graph --format json
-cb clusters
-cb hotspots
+cb quality --hotspots
 ```
 
-Use `--format json` when consuming results programmatically. Preserve the returned coverage and processing diagnostics; a low finding count is not meaningful when coverage is partial.
+Prefer `--format json` for machine-readable analysis reports, but confirm the chosen view's output before parsing: some focused views emit text. Preserve the returned coverage and processing diagnostics; a low finding count is not meaningful when coverage is partial.
 
 Do not run every command by default. Choose the smallest set that answers the task:
 
-- Architecture or dependency question: `structure`, `graph`, `clusters`, `path`.
-- File ownership or impact question: `inspect`, `related`, `why`.
-- Quality investigation: `complexity`, `duplication`, `dead`, `hotspots`.
-- Change review: `review`, `pr`, or a command with `--changed`.
-- Remediation planning: `actions`, `plan`, then `explain <rule-id>`.
+- Architecture or dependency question: `quality --structure`, `graph`, `inspect --path`.
+- File ownership or impact question: `inspect`, `inspect --related`, `inspect --why`.
+- Quality investigation: `quality --complexity`, `duplication`, `dead`, `quality --hotspots`.
+- Change review: `review --changed`, `review --pr`, or `review --changed-base <ref>`.
+- Remediation planning: `review --format actions`, `review --format plan`, then `rules <rule-id>`.
 
 See [references/commands.md](references/commands.md) for command selection.
 
@@ -49,11 +48,12 @@ See [references/commands.md](references/commands.md) for command selection.
 For each finding that may drive a change:
 
 1. Record its code, path, line, severity, confidence, rationale, and suggestion.
-2. Run `cb explain <rule-id>` to read the rule’s evidence and limitations.
+2. Run `cb rules <rule-id>` to read the rule's evidence and limitations.
 3. Inspect the source and its callers before deciding whether the finding is actionable.
 4. Distinguish actionable findings, advisories, security hotspots, and processing diagnostics.
 5. Check source classification before acting on generated, test, example, benchmark, or vendored code.
 6. Treat repository configuration, baselines, and suppressions as user policy.
+7. Use `--advisory` to inspect detailed advisory evidence; summary counts alone are not a review.
 
 Never claim a defect solely because Code Buster emitted a heuristic finding. Never hide a real issue merely to reduce the count.
 
@@ -62,15 +62,15 @@ Never claim a defect solely because Code Buster emitted a heuristic finding. Nev
 For worktree or pull-request review, prefer changed-scope analysis:
 
 ```sh
-cb review --changed
-cb pr --changed
+cb review --changed --advisory --format json
+cb review --pr --advisory --format json
 cb summary --changed --format json
 ```
 
 Use the repository’s chosen changed base when required:
 
 ```sh
-cb pr --changed-base <ref>
+cb review --changed-base <ref> --advisory --format json
 ```
 
 Correlate findings with the actual diff. Report pre-existing findings separately from regressions introduced by the change.
